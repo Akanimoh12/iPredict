@@ -1,0 +1,11 @@
+{
+  "network": "Injective EVM Testnet",
+  "chainId": 1439,
+  "rpcUrl": "https://testnet.sentry.chain.json-rpc.injective.network",
+  "explorer": "https://testnet.blockscout.injective.network",
+  "contractAddress": "0xfd2f67cD354545712f9d8230170015d7e30d133A",
+  "deploymentTx": "0x4139d366b80cec61e9b3b273a9abc89324bab62ad285edd57e580480516b6696",
+  "deployer": "0x9bcf302cFCB64406b557342c2715e85Ac62A4693",
+  "deployedAt": "2025-01-14",
+  "verified": false
+}
