@@ -635,3 +635,298 @@ export function usePlatformStats() {
     isLoading: countLoading || marketsLoading,
   };
 }
+
+// ============================================
+// Admin Hooks
+// ============================================
+
+// Get contract admin address
+export function useAdmin() {
+  const result = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    functionName: 'admin',
+    query: {
+      staleTime: 60000, // Cache for 1 minute
+    },
+  });
+
+  return {
+    admin: result.data as `0x${string}` | undefined,
+    isLoading: result.isLoading,
+    isError: result.isError,
+    error: result.error,
+  };
+}
+
+// Get platform fee
+export function usePlatformFee() {
+  const result = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    functionName: 'platformFee',
+  });
+
+  return {
+    fee: result.data as bigint | undefined,
+    feePercent: result.data ? Number(result.data) / 100 : undefined,
+    isLoading: result.isLoading,
+  };
+}
+
+// Get accumulated fees
+export function useAccumulatedFees() {
+  const result = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    functionName: 'accumulatedFees',
+    query: {
+      refetchInterval: 30000,
+    },
+  });
+
+  return {
+    fees: result.data as bigint | undefined,
+    isLoading: result.isLoading,
+    refetch: result.refetch,
+  };
+}
+
+// Get paused state
+export function usePausedState() {
+  const result = useReadContract({
+    address: CONTRACT_ADDRESS,
+    abi: CONTRACT_ABI,
+    functionName: 'paused',
+    query: {
+      refetchInterval: 10000,
+    },
+  });
+
+  return {
+    isPaused: result.data as boolean | undefined,
+    isLoading: result.isLoading,
+    refetch: result.refetch,
+  };
+}
+
+// Get pending markets (ended but not resolved)
+export function usePendingMarkets() {
+  const { markets, isLoading, refetch } = useMarkets(0, 100);
+  
+  const pendingMarkets = markets?.filter(market => {
+    const now = Math.floor(Date.now() / 1000);
+    const endTime = Number(market.endTime);
+    return endTime < now && !market.resolved && !market.cancelled;
+  });
+
+  return {
+    pendingMarkets,
+    isLoading,
+    refetch,
+  };
+}
+
+// Create market mutation hook
+export function useCreateMarket() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const createMarket = useCallback(async (
+    question: string,
+    imageUrl: string,
+    category: string,
+    duration: bigint
+  ) => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'createMarket',
+      args: [question, imageUrl, category, duration],
+    });
+  }, [writeContract]);
+
+  // Invalidate queries on success
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { 
+    createMarket, 
+    txHash: hash,
+    isPending,
+    isConfirming,
+    isSuccess,
+    isError,
+    error,
+    reset,
+  };
+}
+
+// Resolve market mutation hook
+export function useResolveMarket() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const resolveMarket = useCallback(async (marketId: bigint, outcome: boolean) => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'resolveMarket',
+      args: [marketId, outcome],
+    });
+  }, [writeContract]);
+
+  // Invalidate queries on success
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { 
+    resolveMarket, 
+    txHash: hash,
+    isPending,
+    isConfirming,
+    isSuccess,
+    isError,
+    error,
+    reset,
+  };
+}
+
+// Cancel market mutation hook
+export function useCancelMarket() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const cancelMarket = useCallback(async (marketId: bigint) => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'cancelMarket',
+      args: [marketId],
+    });
+  }, [writeContract]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { 
+    cancelMarket, 
+    txHash: hash,
+    isPending,
+    isConfirming,
+    isSuccess,
+    isError,
+    error,
+    reset,
+  };
+}
+
+// Withdraw fees mutation hook
+export function useWithdrawFees() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const withdrawFees = useCallback(async () => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'withdrawFees',
+      args: [],
+    });
+  }, [writeContract]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { 
+    withdrawFees, 
+    txHash: hash,
+    isPending,
+    isConfirming,
+    isSuccess,
+    isError,
+    error,
+    reset,
+  };
+}
+
+// Pause/unpause mutation hooks
+export function usePause() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const pause = useCallback(async () => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'pause',
+      args: [],
+    });
+  }, [writeContract]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { pause, txHash: hash, isPending, isConfirming, isSuccess, isError, error, reset };
+}
+
+export function useUnpause() {
+  const queryClient = useQueryClient();
+  const { writeContract, data: hash, isPending, isError, error, reset } = useWriteContract();
+  
+  const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const unpause = useCallback(async () => {
+    await writeContract({
+      address: CONTRACT_ADDRESS,
+      abi: CONTRACT_ABI,
+      functionName: 'unpause',
+      args: [],
+    });
+  }, [writeContract]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      queryClient.invalidateQueries({ queryKey: ['readContract'] });
+    }
+  }, [isSuccess, queryClient]);
+
+  return { unpause, txHash: hash, isPending, isConfirming, isSuccess, isError, error, reset };
+}
