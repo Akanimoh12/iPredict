@@ -24,10 +24,9 @@ import {
   RefreshCw,
   Filter,
   History,
-  Award,
   PartyPopper,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -42,12 +41,11 @@ import {
   useBatchClaim,
   useCalculateWinnings,
 } from '@/hooks/useContract';
-import { formatINJ, getExplorerUrl, cn, getTimeRemaining } from '@/lib/utils';
+import { formatINJ, cn, getTimeRemaining } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { CountdownTimer } from '@/components/countdown-timer';
-import { StatusBadge } from '@/components/status-badge';
-import type { MarketWithOdds, Bet } from '@/types';
+import type { MarketWithOdds } from '@/types';
 
 // Confetti celebration
 const triggerConfetti = () => {
@@ -78,7 +76,7 @@ export default function ProfilePage() {
       setCopiedAddress(true);
       setTimeout(() => setCopiedAddress(false), 2000);
       toast({ title: 'Address copied!' });
-    } catch (err) {
+    } catch {
       toast({ title: 'Failed to copy', variant: 'destructive' });
     }
   };

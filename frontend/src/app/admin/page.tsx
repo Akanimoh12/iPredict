@@ -85,7 +85,6 @@ const DURATION_PRESETS = [
 export default function AdminPage() {
   const { address, isConnected } = useAccount();
   const { admin, isLoading: adminLoading } = useAdmin();
-  const { toast } = useToast();
 
   // Check if connected wallet is admin
   const isAdmin = address && admin && address.toLowerCase() === admin.toLowerCase();

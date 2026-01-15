@@ -48,6 +48,7 @@ export function AnimatedCounter({
     };
 
     requestAnimationFrame(animate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration]);
 
   const formattedValue = decimals > 0 

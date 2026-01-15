@@ -8,21 +8,18 @@ import {
   Crown,
   Copy,
   Check,
-  TrendingUp,
-  Target,
-  Percent,
   User,
   Rocket,
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserStats, useMarkets } from '@/hooks/useContract';
-import { formatINJ, cn } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
@@ -130,7 +127,8 @@ function useLeaderboard() {
     ];
     
     return mockUsers;
-  }, [markets]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { leaderboard, isLoading };
 }
@@ -167,7 +165,7 @@ export default function LeaderboardPage() {
       await navigator.clipboard.writeText(addr);
       setCopiedAddress(addr);
       setTimeout(() => setCopiedAddress(null), 2000);
-    } catch (err) {
+    } catch {
       toast({ title: 'Failed to copy', variant: 'destructive' });
     }
   };
