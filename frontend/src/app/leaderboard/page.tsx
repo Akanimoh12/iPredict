@@ -37,7 +37,7 @@ interface LeaderboardEntry {
 // Mock leaderboard data (in production, this would come from an indexer or subgraph)
 // For now, we'll aggregate from market data
 function useLeaderboard() {
-  const { markets, isLoading } = useMarkets(0, 100);
+  const { isLoading } = useMarkets(0, 100);
   
   // In a real implementation, you'd aggregate user stats from events or a database
   // For now, we'll create mock data based on what we have
