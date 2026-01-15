@@ -280,7 +280,7 @@ function CreateMarketSection() {
         description: 'Your market is now live',
         action: (
           <Button variant="outline" size="sm" asChild>
-            <a href={getExplorerUrl(txHash)} target="_blank" rel="noopener noreferrer">
+            <a href={getExplorerUrl('tx', txHash)} target="_blank" rel="noopener noreferrer">
               View TX
             </a>
           </Button>
