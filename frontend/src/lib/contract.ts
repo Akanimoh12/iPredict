@@ -208,6 +208,57 @@ export const CONTRACT_ABI = [
     outputs: [],
     stateMutability: "nonpayable",
   },
+  // Admin Write Functions
+  {
+    type: "function",
+    name: "createMarket",
+    inputs: [
+      { name: "question", type: "string", internalType: "string" },
+      { name: "imageUrl", type: "string", internalType: "string" },
+      { name: "category", type: "string", internalType: "string" },
+      { name: "duration", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [{ name: "", type: "uint256", internalType: "uint256" }],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "resolveMarket",
+    inputs: [
+      { name: "marketId", type: "uint256", internalType: "uint256" },
+      { name: "outcome", type: "bool", internalType: "bool" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "cancelMarket",
+    inputs: [{ name: "marketId", type: "uint256", internalType: "uint256" }],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "pause",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "unpause",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+  {
+    type: "function",
+    name: "withdrawFees",
+    inputs: [],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
   // Events
   {
     type: "event",
