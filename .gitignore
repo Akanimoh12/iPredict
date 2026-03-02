@@ -1,0 +1,43 @@
+# ── Clarinet / Stacks ──────────────────────────────────────────────────────────
+contracts/.cache/
+contracts/node_modules/
+contracts/history.txt
+contracts/coverage/
+costs-reports.json
+
+# ── Sensitive Clarinet settings (contain mnemonics / secret keys) ──────────────
+contracts/settings/Testnet.toml
+contracts/settings/Mainnet.toml
+
+# ── Node.js / Next.js ─────────────────────────────────────────────────────────
+node_modules/
+.next/
+out/
+frontend/.next/
+frontend/out/
+frontend/node_modules/
+
+# ── Environment & Secrets ──────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+*.pem
+
+# ── IDE / Editor ───────────────────────────────────────────────────────────────
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ── Misc ───────────────────────────────────────────────────────────────────────
+*.log
+*.tsbuildinfo
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vercel

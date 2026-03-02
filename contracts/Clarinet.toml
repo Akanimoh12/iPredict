@@ -1,0 +1,26 @@
+[project]
+name = "ipredict"
+description = "iPredict -- Decentralized Prediction Market on Stacks"
+authors = []
+telemetry = false
+cache_dir = "./.cache"
+
+[contracts.ipredict-token]
+path = "contracts/ipredict-token.clar"
+epoch = "3.0"
+
+[contracts.leaderboard]
+path = "contracts/leaderboard.clar"
+epoch = "3.0"
+
+[contracts.referral-registry]
+path = "contracts/referral-registry.clar"
+epoch = "3.0"
+
+[contracts.prediction-market]
+path = "contracts/prediction-market.clar"
+epoch = "3.0"
+
+[repl.analysis]
+passes = ["check_checker"]
+check_checker = { trusted_sender = false, trusted_caller = false, callee_filter = false }
