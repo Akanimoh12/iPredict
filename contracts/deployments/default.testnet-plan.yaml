@@ -1,0 +1,39 @@
+---
+id: 0
+name: Testnet deployment
+network: testnet
+stacks-node: "https://api.testnet.hiro.so"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: ipredict-token
+            expected-sender: ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV
+            cost: 49930
+            path: contracts/ipredict-token.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: leaderboard
+            expected-sender: ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV
+            cost: 116880
+            path: contracts/leaderboard.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: referral-registry
+            expected-sender: ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV
+            cost: 59920
+            path: contracts/referral-registry.clar
+            anchor-block-only: true
+            clarity-version: 3
+        - contract-publish:
+            contract-name: prediction-market
+            expected-sender: ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV
+            cost: 166710
+            path: contracts/prediction-market.clar
+            anchor-block-only: true
+            clarity-version: 3
+      epoch: "3.0"
