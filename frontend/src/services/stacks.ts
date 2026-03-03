@@ -63,28 +63,61 @@ export async function callReadOnly(
 // ── STX Balance ───────────────────────────────────────────────────────────────
 
 /**
- * Fetch the current Stacks chain tip block height from the API.
+ * Block info: current chain tip height + estimated block time.
  * Cached for 60 seconds to avoid excessive API calls.
  */
-let _cachedBlockHeight: { value: number; fetchedAt: number } | null = null;
-const BLOCK_HEIGHT_TTL = 60_000; // 60 s
+export interface BlockInfo {
+  height: number;
+  blockTimeSeconds: number;
+}
 
-export async function getCurrentBlockHeight(): Promise<number> {
-  if (_cachedBlockHeight && Date.now() - _cachedBlockHeight.fetchedAt < BLOCK_HEIGHT_TTL) {
-    return _cachedBlockHeight.value;
+let _cachedBlockInfo: { data: BlockInfo; fetchedAt: number } | null = null;
+const BLOCK_INFO_TTL = 60_000; // 60 s
+
+/**
+ * Fetch block info from the Stacks API.
+ * Dynamically computes block time using tenure_height and stacks_tip_height
+ * to handle Nakamoto's fast block production (~23s on testnet vs ~600s pre-Nakamoto).
+ */
+export async function getBlockInfo(): Promise<BlockInfo> {
+  if (_cachedBlockInfo && Date.now() - _cachedBlockInfo.fetchedAt < BLOCK_INFO_TTL) {
+    return _cachedBlockInfo.data;
   }
   try {
     const response = await fetch(`${STACKS_API_URL}/v2/info`);
     if (!response.ok) throw new Error(`API error: ${response.statusText}`);
     const data = await response.json();
-    const height = Number(data.stacks_tip_height);
-    _cachedBlockHeight = { value: height, fetchedAt: Date.now() };
-    return height;
+
+    const stacksTipHeight = Number(data.stacks_tip_height);
+    const tenureHeight = Number(data.tenure_height);
+
+    // Estimate Stacks block time from tenure data.
+    // tenure_height ≈ Bitcoin blocks (~600s each on mainnet).
+    // Stacks blocks per tenure = stacksTipHeight / tenureHeight.
+    const BITCOIN_BLOCK_TIME = 600; // ~10 minutes
+    let blockTimeSeconds: number;
+    if (tenureHeight > 0 && stacksTipHeight > 0) {
+      const blocksPerTenure = stacksTipHeight / tenureHeight;
+      blockTimeSeconds = Math.max(1, Math.round(BITCOIN_BLOCK_TIME / blocksPerTenure));
+    } else {
+      blockTimeSeconds = BITCOIN_BLOCK_TIME; // fallback to ~10 min
+    }
+
+    const blockInfo: BlockInfo = { height: stacksTipHeight, blockTimeSeconds };
+    _cachedBlockInfo = { data: blockInfo, fetchedAt: Date.now() };
+    return blockInfo;
   } catch (err) {
-    console.error('[iPredict] Failed to fetch block height:', err);
-    // Fallback: return 0 so endTime stays as a far-future timestamp
-    return _cachedBlockHeight?.value ?? 0;
+    console.error('[iPredict] Failed to fetch block info:', err);
+    return _cachedBlockInfo?.data ?? { height: 0, blockTimeSeconds: 600 };
   }
+}
+
+/**
+ * Convenience wrapper — returns just the block height.
+ */
+export async function getCurrentBlockHeight(): Promise<number> {
+  const info = await getBlockInfo();
+  return info.height;
 }
 
 /**

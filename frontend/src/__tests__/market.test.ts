@@ -4,12 +4,12 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const mockCallReadOnly = vi.fn();
 const mockParseResponse = vi.fn((v: unknown) => v);
-const mockGetCurrentBlockHeight = vi.fn().mockResolvedValue(50);
+const mockGetBlockInfo = vi.fn().mockResolvedValue({ height: 50, blockTimeSeconds: 23 });
 
 vi.mock("@/services/stacks", () => ({
   callReadOnly: (...args: unknown[]) => mockCallReadOnly(...args),
   parseResponse: (v: unknown) => mockParseResponse(v),
-  getCurrentBlockHeight: () => mockGetCurrentBlockHeight(),
+  getBlockInfo: () => mockGetBlockInfo(),
 }));
 
 vi.mock("@/services/cache", () => ({
@@ -33,8 +33,9 @@ vi.mock("@stacks/transactions", () => ({
   stringUtf8CV: (val: string) => ({ type: "string-utf8", value: val }),
   principalCV: (val: string) => ({ type: "principal", value: val }),
   Pc: {
-    principal: () => ({ willSendEq: () => ({ ustx: () => ({}) }) }),
+    principal: () => ({ willSendLte: () => ({ ustx: () => ({}) }) }),
   },
+  PostConditionMode: { Allow: 1, Deny: 2 },
 }));
 
 vi.mock("@/config/network", () => ({
@@ -42,7 +43,6 @@ vi.mock("@/config/network", () => ({
   MARKET_CONTRACT_NAME: "prediction-market",
   STACKS_API_URL: "https://api.testnet.hiro.so",
   NETWORK_NAME: "testnet",
-  BLOCK_TIME_SECONDS: 600,
   TOTAL_FEE_BPS: 200,
   PLATFORM_FEE_BPS: 150,
   REFERRAL_FEE_BPS: 50,
@@ -59,7 +59,7 @@ describe("market service", () => {
 
   describe("getMarket", () => {
     it("returns parsed Market object on success", async () => {
-      mockGetCurrentBlockHeight.mockResolvedValueOnce(50);
+      mockGetBlockInfo.mockResolvedValueOnce({ height: 50, blockTimeSeconds: 23 });
       mockCallReadOnly.mockResolvedValueOnce("cv");
       mockParseResponse.mockReturnValueOnce({
         question: "Will ETH flip BTC?",

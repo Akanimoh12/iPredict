@@ -5,15 +5,15 @@ import {
   stringUtf8CV,
   principalCV,
   Pc,
+  PostConditionMode,
 } from '@stacks/transactions';
 import {
   DEPLOYER_ADDRESS,
   MARKET_CONTRACT_NAME,
   STACKS_API_URL,
   NETWORK_NAME,
-  BLOCK_TIME_SECONDS,
 } from '@/config/network';
-import { callReadOnly, parseResponse, getCurrentBlockHeight } from '@/services/stacks';
+import { callReadOnly, parseResponse, getBlockInfo } from '@/services/stacks';
 import * as cache from '@/services/cache';
 import { getDisplayName } from '@/services/referral';
 import type { Market, Bet, TransactionResult } from '@/types';
@@ -72,10 +72,10 @@ interface RawMarket {
   'bet-count': number;
 }
 
-function parseMarket(raw: RawMarket, id: number, currentBlockHeight: number): Market {
+function parseMarket(raw: RawMarket, id: number, currentBlockHeight: number, blockTimeSeconds: number): Market {
   // Convert block height to estimated Unix timestamp (seconds)
   const blocksRemaining = Math.max(0, Number(raw['end-block']) - currentBlockHeight);
-  const estimatedEndTime = Math.floor(Date.now() / 1000) + blocksRemaining * BLOCK_TIME_SECONDS;
+  const estimatedEndTime = Math.floor(Date.now() / 1000) + blocksRemaining * blockTimeSeconds;
 
   return {
     id,
@@ -115,18 +115,18 @@ export async function getMarket(marketId: number): Promise<Market | null> {
   if (cached) return cached;
 
   try {
-    const [cv, currentBlockHeight] = await Promise.all([
+    const [cv, blockInfo] = await Promise.all([
       callReadOnly(
         DEPLOYER_ADDRESS,
         MARKET_CONTRACT_NAME,
         'get-market',
         [uintCV(marketId)]
       ),
-      getCurrentBlockHeight(),
+      getBlockInfo(),
     ]);
     const raw = parseResponse(cv) as RawMarket | null;
     if (!raw) return null;
-    const market = parseMarket(raw, marketId, currentBlockHeight);
+    const market = parseMarket(raw, marketId, blockInfo.height, blockInfo.blockTimeSeconds);
     cache.set(CACHE_MARKET(marketId), market, MARKET_TTL);
     return market;
   } catch {
@@ -140,15 +140,15 @@ export async function getMarkets(): Promise<Market[]> {
   if (cached) return cached;
 
   try {
-    // Get total count + current block height in parallel
-    const [countCv, currentBlockHeight] = await Promise.all([
+    // Get total count + current block info in parallel
+    const [countCv, blockInfo] = await Promise.all([
       callReadOnly(
         DEPLOYER_ADDRESS,
         MARKET_CONTRACT_NAME,
         'get-market-count',
         []
       ),
-      getCurrentBlockHeight(),
+      getBlockInfo(),
     ]);
     const total = Number(parseResponse(countCv));
     if (total === 0) return [];
@@ -166,7 +166,7 @@ export async function getMarkets(): Promise<Market[]> {
           );
           const raw = parseResponse(cv) as RawMarket | null;
           if (!raw) return null;
-          return parseMarket(raw, id, currentBlockHeight);
+          return parseMarket(raw, id, blockInfo.height, blockInfo.blockTimeSeconds);
         } catch {
           return null;
         }
@@ -390,8 +390,9 @@ export async function placeBet(
       contractName: MARKET_CONTRACT_NAME,
       functionName: 'place-bet',
       functionArgs: [uintCV(marketId), boolCV(isYes), uintCV(amountMicroStx)],
+      postConditionMode: PostConditionMode.Allow,
       postConditions: [
-        Pc.principal(senderAddress).willSendEq(amountMicroStx).ustx(),
+        Pc.principal(senderAddress).willSendLte(amountMicroStx).ustx(),
       ],
       network: NETWORK_NAME === 'mainnet' ? 'mainnet' : 'testnet',
       onFinish: async (data) => {
@@ -447,6 +448,7 @@ export async function cancelMarket(
       contractName: MARKET_CONTRACT_NAME,
       functionName: 'cancel-market',
       functionArgs: [uintCV(marketId)],
+      postConditionMode: PostConditionMode.Allow,
       network: NETWORK_NAME === 'mainnet' ? 'mainnet' : 'testnet',
       onFinish: async (data) => {
         cache.invalidate(CACHE_MARKETS);
@@ -473,6 +475,7 @@ export async function claim(
       contractName: MARKET_CONTRACT_NAME,
       functionName: 'claim',
       functionArgs: [uintCV(marketId)],
+      postConditionMode: PostConditionMode.Allow,
       network: NETWORK_NAME === 'mainnet' ? 'mainnet' : 'testnet',
       onFinish: async (data) => {
         cache.invalidate(CACHE_BET(marketId, senderAddress));
@@ -498,6 +501,7 @@ export async function withdrawFees(
       contractName: MARKET_CONTRACT_NAME,
       functionName: 'withdraw-fees',
       functionArgs: [],
+      postConditionMode: PostConditionMode.Allow,
       network: NETWORK_NAME === 'mainnet' ? 'mainnet' : 'testnet',
       onFinish: async (data) => {
         cache.invalidate(CACHE_FEES);

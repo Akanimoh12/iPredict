@@ -28,7 +28,7 @@ export default function MarketCard({ market }: MarketCardProps) {
   return (
     <Link
       href={`/markets/${market.id}`}
-      className="group block bg-surface-card border border-surface-border rounded-2xl overflow-hidden hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 hover:-translate-y-0.5"
+      className="group block bg-surface-card border-2 border-surface-border rounded-2xl overflow-hidden hover:border-primary-500/50 hover:shadow-lg hover:shadow-primary-500/5 transition-all duration-300 hover:-translate-y-0.5"
     >
       {/* Image with status overlay */}
       <div className="relative">
