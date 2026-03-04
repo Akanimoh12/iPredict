@@ -2,7 +2,7 @@
   <img src="frontend/public/favicon.svg" width="64" height="64" alt="iPredict logo" />
 </p>
 
-<h1 align="center">iPredict — Prediction Market on Stacks</h1>
+<h1 align="center">iPredict - Prediction Market on Stacks</h1>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Stacks-Clarity-purple?logo=stacks" alt="Stacks" />
@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Bitcoin-Secured-orange?logo=bitcoin" alt="Bitcoin" />
 </p>
 
-> **Predict. Win or Lose — You Always Earn.** Decentralized prediction market on Stacks, secured by Bitcoin via Proof of Transfer.
+> **Predict. Win or Lose: You Always Earn.** Decentralized prediction market on Stacks, secured by Bitcoin via Proof of Transfer.
 
 ---
 
@@ -20,17 +20,16 @@
 
 ## Demo Video
 
-[Watch Full MVP Flow on YouTube](https://youtu.be/k3XKU__0uVs) — *Wallet connect → browse markets → place bet → view leaderboard → claim reward → referral flow*
+[Watch Full MVP Flow on YouTube](https://youtu.be/k3XKU__0uVs) — *Wallet connect - browse markets - place bet - leaderboard - claim reward - referral flow*
 
-## Screenshots
-
-| Landing Page | Markets Browser | Market Detail |
-|:---:|:---:|:---:|
-| ![Landing](docs/screenshots/landing.png) | ![Markets](docs/screenshots/markets.png) | ![Detail](docs/screenshots/detail.png) |
-
-| Betting Panel | Leaderboard | Profile |
-|:---:|:---:|:---:|
-| ![Betting](docs/screenshots/betting.png) | ![Leaderboard](docs/screenshots/leaderboard.png) | ![Profile](docs/screenshots/profile.png) |
+## Deployed Contracts
+- **Testnet Deployer Address:** `ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV`
+- **Explorer Link:** [https://explorer.hiro.so/address/ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV?chain=testnet](https://explorer.hiro.so/address/ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV?chain=testnet)
+- **Contract Addresses:**
+  - `ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV.prediction-market`
+  - `ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV.ipredict-token`
+  - `ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV.referral-registry`
+  - `ST1XHPEWSZYNN2QA9QG9JG9GHRVF6GZSFRWTFB5VV.leaderboard`
 
 ---
 
