@@ -4,11 +4,11 @@
 
 ### A quick reality check
 
-Ethereum has Polymarket, Augur, and Gnosis. Solana has Hedgehog and Drift. Base has Thales. Stacks has zero prediction markets.
+Ethereum has Polymarket, Augur, and Gnosis. Solana has Hedgehog and Drift. Base has Thales. On Stacks, StacksMarket offers basic betting — but there's no full-featured prediction market with gamification, loser rewards, and composable on-chain infrastructure.
 
 That's not a small thing. Prediction markets are one of the highest-engagement categories in all of DeFi. Polymarket alone moved over $1 billion in volume during the 2024 US election cycle. These platforms generate daily active users, real token volume, and the kind of community buzz that keeps people talking about a chain.
 
-iPredict brings this entire product category to Stacks for the first time.
+iPredict brings the full prediction market experience to Stacks — raising the bar from basic betting to a gamified, composable platform.
 
 ---
 
@@ -83,18 +83,18 @@ IPREDICT is a standard SIP-010 token. Once it has real distribution through mark
 
 ## How We Stack Up
 
-| Feature | iPredict (Stacks) | Polymarket (Polygon) | Hedgehog (Solana) |
-|---------|-------------------|---------------------|-------------------|
-| Chain | Stacks (Bitcoin L2) | Polygon | Solana |
-| Settlement model | Pari-mutuel | Order book | AMM |
-| Losers earn rewards | Yes | No | No |
-| Referral system | On-chain, 0.5% of bets | Off-chain | None |
-| Leaderboard | On-chain, real-time | Centralized | Limited |
-| Platform token | IPREDICT (SIP-010) | None | None |
-| Open source | Yes (MIT) | No | Partial |
-| Bitcoin-secured | Yes (PoX) | No | No |
+| Feature | iPredict | StacksMarket | Polymarket (Polygon) | Hedgehog (Solana) |
+|---------|----------|-------------|---------------------|-------------------|
+| Chain | Stacks (Bitcoin L2) | Stacks | Polygon | Solana |
+| Settlement model | Pari-mutuel | Basic betting | Order book | AMM |
+| Losers earn rewards | Yes | No | No | No |
+| Referral system | On-chain, 0.5% of bets | No | Off-chain | None |
+| Leaderboard | On-chain, real-time | No | Centralized | Limited |
+| Platform token | IPREDICT (SIP-010) | No | None | None |
+| Open source | Yes (MIT) | No | No | Partial |
+| Composable contracts | Yes (4 contracts) | No | No | No |
 
-We're not trying to out-volume Polymarket. We're bringing a proven product category to an ecosystem that doesn't have it, with features that don't exist anywhere else — loser rewards, on-chain referrals, and a fully gamified leaderboard.
+We're not trying to out-volume Polymarket. StacksMarket proved there's demand for betting on Stacks — iPredict takes that further with features that don't exist anywhere else on the chain: loser rewards, on-chain referrals, a gamified leaderboard, and composable architecture other projects can build on.
 
 ---
 

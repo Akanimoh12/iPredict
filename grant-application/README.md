@@ -33,7 +33,7 @@
 
 **1. The product is already built.** This isn't a concept or a whitepaper. There are 1,108 lines of production Clarity code, 400+ passing tests (including fuzz invariants), and a live frontend with wallet integration on Stacks testnet. Try it right now.
 
-**2. First prediction market on Stacks.** Ethereum has Polymarket. Solana has Hedgehog. Stacks has had nothing — until now.
+**2. The full prediction market experience on Stacks.** StacksMarket offers basic betting. iPredict goes further — loser rewards, on-chain referrals, gamified leaderboard, SIP-010 reward token, and composable architecture other projects can build on.
 
 **3. Everyone earns, even on a losing bet.** Most prediction markets give losers nothing. iPredict gives every participant points and IPREDICT tokens, so they come back instead of leaving.
 

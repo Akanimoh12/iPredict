@@ -10,13 +10,13 @@
 
 ## What's Missing on Stacks
 
-Prediction markets are everywhere in crypto — except Stacks. Polymarket pulled in over a billion dollars during the 2024 US election. Solana has Hedgehog. Even Base has Thales. Stacks? Zero.
+Prediction markets are everywhere in crypto. Polymarket pulled in over a billion dollars during the 2024 US election. Solana has Hedgehog. Even Base has Thales. On Stacks, StacksMarket offers basic betting — but there's no full-featured prediction market with gamification, loser rewards, on-chain referrals, and composable infrastructure.
 
-That's a problem, because prediction markets are one of the stickiest product categories in this space. People come back every day to check positions, place new bets, flex on the leaderboard. They generate real on-chain volume — not pageviews, not "connected wallets," but actual STX moving between addresses on every single interaction.
+That's a gap, because prediction markets are one of the stickiest product categories in this space. People come back every day to check positions, place new bets, flex on the leaderboard. They generate real on-chain volume — not pageviews, not "connected wallets," but actual STX moving between addresses on every single interaction.
 
 And here's the thing: prediction markets are a *perfect* fit for a Bitcoin-anchored chain. The whole value proposition is "nobody can mess with the results." Clarity enforces the rules. Bitcoin anchors the settlement. That combination is exactly what you want when real money is on the line.
 
-Right now, if a Stacks user wants to bet on whether BTC hits $150K, they have to leave the ecosystem. There's no good reason for that.
+Right now, if a Stacks user wants a prediction market experience with rewards for every participant, on-chain referrals, and a gamified leaderboard — they have to leave the ecosystem. There's no good reason for that.
 
 ---
 
